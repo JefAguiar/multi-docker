@@ -15,7 +15,7 @@ after_success:
   - docker build -t jefsilva/multi-worker ./worker
 
   #Login in to the docker CLI
-  - echo "$DOCKER_PASSOWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   #take those images and push to DockerHub
   - docker push jefsilva/multi-client
   - docker push jefsilva/multi-nginx
