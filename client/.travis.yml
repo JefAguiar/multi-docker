@@ -1,0 +1,25 @@
+sud: required
+services:
+  - docker
+
+before_install:
+  - docker build -t jefsilva/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run jefsilva/react-test npm run test -- --coverage
+
+after_success:
+  - docker build -t jefsilva/multi-client ./client
+  - docker build -t jefsilva/multi-nginx ./nginx
+  - docker build -t jefsilva/multi-server ./server
+  - docker build -t jefsilva/multi-worker ./worker
+
+  #Login in to the docker CLI
+  - echo "$DOCKER_PASSOWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  #take those images and push to DockerHub
+  - docker push jefsilva/multi-client
+  - docker push jefsilva/multi-nginx
+  - docker push jefsilva/multi-server
+  - docker push jefsilva/multi-worker
+
+
